@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BotWebServer.Models.Commands;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace BotWebServer.Models
                 commandsList = new List<Command>();
                 commandsList.Add(new StartCommand());
                 commandsList.Add(new QuoteCommand());
+                commandsList.Add(new NewsCommand());
                 //TODO: Add more commands
 
                 botClient = new TelegramBotClient(BotSettings.Token);
