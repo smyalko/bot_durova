@@ -38,10 +38,37 @@ namespace BotWebServer.Models.Commands
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(pageContents);
 
-            //Parse for an article elements
+            //Parse pagination number to define max page number
+            var pagination = htmlDocument.GetElementbyId("content").SelectNodes("//div[@class='pagination']//a");
+
+            //Parse number
+            int lastPageNumber = int.Parse(pagination[pagination.Count - 1].InnerText);
+
+            //Which page of site must be parsed for random task
+            Random random = new Random();
+            int pageToSelect = random.Next(1, lastPageNumber);
+            Console.WriteLine(pageToSelect);
+
+            //If randomly generated page number is not the same as 1 (first page) download new page
+            if (pageToSelect != 1)
+            {
+                //Donwload news from kod.ru
+                response = await httpClient.GetAsync($"https://tproger.ru/category/problems/page/{pageToSelect}/");
+                pageContents = await response.Content.ReadAsStringAsync();
+
+                htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(pageContents);
+            }
+            //Otherwise just parse existing page
+
             var articles = htmlDocument.GetElementbyId("content").SelectNodes("//article//h2[@class='entry-title']//a");
 
-            Random random = new Random();
+            //foreach (var article in articles)
+            //{
+            //    System.Console.WriteLine(article.SelectSingleNode("span[@class='entry-title-heading']").InnerText);
+            //    System.Console.WriteLine(article.GetAttributeValue("href", "undefined link"));
+            //}
+
             int randomTaskNumber = random.Next(1, articles.Count - 1);
 
             //Get random task from tasks
@@ -49,8 +76,7 @@ namespace BotWebServer.Models.Commands
             string randomTaskTitle = articles[randomTaskNumber].SelectSingleNode("span[@class='entry-title-heading']").InnerText;
 
             //Construct text message
-            StringBuilder messageText = new StringBuilder();
-            messageText.AppendFormat("📗  *Задача для тебя:*\n\n{0}\n\n{1}", randomTaskTitle, randomTaskLink);
+            string messageText = $"📗  *Задача для тебя:*\n\n{randomTaskTitle}\n\n{randomTaskLink}";
 
             //Send message to user
             var chatId = message.Chat.Id;
