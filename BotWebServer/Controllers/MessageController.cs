@@ -38,6 +38,7 @@ namespace BotWebServer.Controllers
                 if (command.Contains(message))
                 {
                     await command.Execute(message, botClient);
+                    logger.LogInformation($"Executed command {command.Name}");
                     break;
                 }
             }
