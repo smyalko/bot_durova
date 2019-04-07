@@ -23,7 +23,7 @@ namespace BotWebServer.Models
         public override async Task Execute(Message message, TelegramBotClient client)
         {
             var chatId = message.Chat.Id;
-            await client.SendTextMessageAsync(chatId, "Hello, i'm a bot, smart like Pavel Durov!", parseMode: ParseMode.Markdown);
+            await client.SendTextMessageAsync(chatId, "Привет, я бот Павла Дурова! Можешь попросить меня о чём-либо коммандой, либо начать разговор", parseMode: ParseMode.Markdown);
         }
     }
 }
