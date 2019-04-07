@@ -25,6 +25,7 @@ namespace BotWebServer.Models
                 commandsList.Add(new NewsCommand());
                 commandsList.Add(new FactCommand());
                 commandsList.Add(new TaskCommand());
+                commandsList.Add(new ArticleCommand());
                 //TODO: Add more commands
 
                 botClient = new TelegramBotClient(BotSettings.Token);
