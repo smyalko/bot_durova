@@ -31,8 +31,11 @@ namespace BotWebServer.Models.Commands
             query = query.Replace("?", "");
             query = query.Replace(" ", "+");
 
+            //Url-encoded query
+            string urlQuery = System.Web.HttpUtility.UrlEncode(query); 
+
             //Download videos list from youtube
-            var response = await httpClient.GetAsync($"https://www.youtube.com/results?search_query={query}");
+            var response = await httpClient.GetAsync($"https://www.youtube.com/results?search_query={urlQuery}");
             var pageContents = await response.Content.ReadAsStringAsync();
 
             HtmlDocument htmlDocument = new HtmlDocument();
